@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
 	"msgboard/db"
+	"msgboard/src/dto"
 	"msgboard/src/model"
+	"msgboard/src/paramDto"
+
 	"net/http"
 	"strconv"
 
@@ -23,25 +26,37 @@ func NewUserRepo() *UserRepo {
 
 //create user
 func (repository *UserRepo) CreateUser(c *gin.Context) {
+	var paramUserDto paramDto.ParamCreateUserDto
+	c.BindJSON(&paramUserDto)
+
+	//送進DB前的資料處理
 	var user model.User
-	c.BindJSON(&user)
+	user.Account = paramUserDto.Account
+	user.Password = paramUserDto.Password
+	user.IsAuthorize = paramUserDto.IsAuthorize
+
 	err := model.CreateUser(repository.Db, &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
 //get users
 func (repository *UserRepo) GetUsers(c *gin.Context) {
-	var user []model.User
-	err := model.GetUsers(repository.Db, &user)
+	var users []model.User
+	err := model.GetUsers(repository.Db, &users)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+
+	//假設送出無需特殊處理，可直接用json轉Dto
+	jsondata, _ := json.Marshal(users)
+	var userDtos []dto.UserDto
+	json.Unmarshal(jsondata, &userDtos)
+	c.JSON(http.StatusOK, userDtos)
 }
 
 //get user by id
@@ -59,16 +74,21 @@ func (repository *UserRepo) GetUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	fmt.Println(user)
-	c.JSON(http.StatusOK, user)
+	//送至前台前如有需特殊處理，可用此寫法
+	var userDto dto.UserDto
+	userDto.UserId = user.UserId
+	userDto.Account = user.Account
+	userDto.IsAuthorize = user.IsAuthorize
+	c.JSON(http.StatusOK, userDto)
 
 }
 
-// update user
-func (repository *UserRepo) UpdateUser(c *gin.Context) {
-	var user model.User
+// update user 授權
+func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 	id, _ := c.Params.Get("UserId")
 	userId, _ := strconv.ParseInt(id, 10, 64)
+
+	var user model.User
 	err := model.GetUser(repository.Db, &user, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -79,13 +99,17 @@ func (repository *UserRepo) UpdateUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.BindJSON(&user)
+
+	var paramUpdateUserDto paramDto.ParamUpdateUserDto
+	c.BindJSON(&paramUpdateUserDto)
+	user.IsAuthorize = paramUpdateUserDto.IsAuthorize
+
 	err = model.UpdateUser(repository.Db, &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
 // delete user

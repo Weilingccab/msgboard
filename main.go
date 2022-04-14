@@ -11,12 +11,29 @@ func setupRouter() *gin.Engine {
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
+
+	//使用者註冊相關
 	userRepo := controller.NewUserRepo()
-	r.POST("/user", userRepo.CreateUser)
-	r.GET("/users", userRepo.GetUsers)
-	r.GET("/user/:UserId", userRepo.GetUser)
-	r.PUT("/user/:UserId", userRepo.UpdateUser)
-	r.DELETE("/user/:UserId", userRepo.DeleteUser)
+	r.POST("/user", userRepo.CreateUser)                               //建立使用者資訊
+	r.GET("/users", userRepo.GetUsers)                                 //取得所有使用者資訊
+	r.GET("/user/:UserId", userRepo.GetUser)                           //取得單一使用者資訊
+	r.PUT("/user/isAuthorize/:UserId", userRepo.UpdateUserIsAuthorize) //修改使用者資訊
+	r.DELETE("/user/:UserId", userRepo.DeleteUser)                     //刪除使用者資訊
+
+	//使用者登入相關
+	// r.POST("/user", userRepo.CreateUser) //建立使用者資訊//使用者登入
+	//使用者是否登入
+
+	//使用者留言相關
+	//登入後建立留言，回覆留言需判斷是否為回覆留言
+	//瀏覽所有留言
+
+	//管理者相關
+	//管理者查看所有留言並可彈性搜尋
+	//管理者隱藏留言
+	//管理者使用者停權
+	//管理者鎖定文章不可留言
+
 	return r
 }
 
