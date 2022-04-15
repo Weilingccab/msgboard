@@ -21,8 +21,8 @@ func NewUserLoginModel() *UserLogin {
 }
 
 //create a user login
-func (*UserLogin) CreateUserLogin(db *gorm.DB, UserLogin *UserLogin) (err error) {
-	err = db.Create(UserLogin).Error
+func (*UserLogin) CreateUserLogin(db *gorm.DB, userLogin *UserLogin) (err error) {
+	err = db.Create(userLogin).Error
 	if err != nil {
 		return err
 	}
@@ -31,8 +31,17 @@ func (*UserLogin) CreateUserLogin(db *gorm.DB, UserLogin *UserLogin) (err error)
 
 //check UserLogin by userId
 func (*UserLogin) GetUserLogin(db *gorm.DB, userLogin *UserLogin, userId int64) (err error) {
-	// err = db.First(userLogin, userId).Error
-	err = db.Where("\"UserId\" = ?", userId).First(&userLogin).Error
+	err = db.Where("\"UserId\" = ?", userId).First(userLogin).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+//check UserLogin by userId
+func (*UserLogin) GetUserLoginToken(db *gorm.DB, userLogin *UserLogin, userLoginTokenId string) (err error) {
+	err = db.Where("\"UserLoginTokenId\" = ?", userLoginTokenId).First(userLogin).Error
 	if err != nil {
 		return err
 	}

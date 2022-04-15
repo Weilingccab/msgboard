@@ -24,8 +24,8 @@ func NewUserModel() *User {
 }
 
 //create a user
-func (*User) CreateUser(db *gorm.DB, User *User) (err error) {
-	err = db.Create(User).Error
+func (*User) CreateUser(db *gorm.DB, user *User) (err error) {
+	err = db.Create(user).Error
 	if err != nil {
 		return err
 	}
@@ -33,8 +33,8 @@ func (*User) CreateUser(db *gorm.DB, User *User) (err error) {
 }
 
 //get users
-func (*User) GetUsers(db *gorm.DB, User *[]User) (err error) {
-	err = db.Find(User).Error
+func (*User) GetUsers(db *gorm.DB, user *[]User) (err error) {
+	err = db.Find(user).Error
 	if err != nil {
 		return err
 	}
@@ -42,8 +42,8 @@ func (*User) GetUsers(db *gorm.DB, User *[]User) (err error) {
 }
 
 //get user by id
-func (*User) GetUser(db *gorm.DB, User *User, id int64) (err error) {
-	err = db.First(User, id).Error
+func (*User) GetUser(db *gorm.DB, user *User, id int64) (err error) {
+	err = db.First(user, id).Error
 	if err != nil {
 		return err
 	}
@@ -51,14 +51,14 @@ func (*User) GetUser(db *gorm.DB, User *User, id int64) (err error) {
 }
 
 //update user
-func (*User) UpdateUser(db *gorm.DB, User *User) (err error) {
-	db.Save(User)
+func (*User) UpdateUser(db *gorm.DB, user *User) (err error) {
+	db.Save(user)
 	return nil
 }
 
 //delete user
-func (*User) DeleteUser(db *gorm.DB, User *User, id int64) (err error) {
-	db.First(User, id).Delete(User)
+func (*User) DeleteUser(db *gorm.DB, user *User, id int64) (err error) {
+	db.First(user, id).Delete(user)
 
 	return nil
 }

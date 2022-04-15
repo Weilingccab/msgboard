@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"msgboard/db"
 	"msgboard/src/model"
 	"msgboard/src/paramDto"
@@ -31,7 +30,6 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 	c.BindJSON(&paramUserLoginDto)
 	var user model.User
 	err := userModel.GetUser(repository.Db, &user, paramUserLoginDto.UserId)
-	fmt.Println(user.UserId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			errmsg := "userId not found:" + strconv.FormatInt(int64(paramUserLoginDto.UserId), 10)
@@ -77,7 +75,6 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 
 }
 
-//get user by id
 func (repository *UserLoginRepo) CheckUserLogin(c *gin.Context) {
 	userLoginModel := model.NewUserLoginModel()
 	id, _ := c.Params.Get("UserId")
