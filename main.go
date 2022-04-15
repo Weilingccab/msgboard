@@ -22,18 +22,18 @@ func setupRouter() *gin.Engine {
 
 	//使用者登入相關
 	userLoginRepo := controller.NewUserLoginRepo()
-
 	r.POST("/userLogin", userLoginRepo.CreateUserLogin)       //使用者有授權者可登入
 	r.PUT("/userLogin/:UserId", userLoginRepo.CheckUserLogin) //使用者是否登入,已登入者回傳資訊
 
 	//使用者留言相關
-	//登入後建立留言，回覆留言需判斷是否為回覆留言
+	messageRepo := controller.NewMessageRepo()
+	r.POST("/message", messageRepo.CreateMessage)//登入後建立留言，回覆留言需判斷是否為回覆留言
 	//瀏覽所有留言
 
 	//管理者相關
 	//管理者查看所有留言並可彈性搜尋
-	//管理者隱藏留言
 	//管理者使用者停權
+	//管理者隱藏留言
 	//管理者鎖定文章不可留言
 
 	return r

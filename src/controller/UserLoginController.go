@@ -25,10 +25,12 @@ func NewUserLoginRepo() *UserLoginRepo {
 
 //create user
 func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
+	userLoginModel := model.NewUserLoginModel()
+	userModel := model.NewUserModel()
 	var paramUserLoginDto paramDto.ParamUserLoginDto
 	c.BindJSON(&paramUserLoginDto)
 	var user model.User
-	err := model.GetUser(repository.Db, &user, paramUserLoginDto.UserId)
+	err := userModel.GetUser(repository.Db, &user, paramUserLoginDto.UserId)
 	fmt.Println(user.UserId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -43,7 +45,7 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 	if user.IsAuthorize {
 		//check is login, if login return token
 		var userLogin model.UserLogin
-		err := model.GetUserLogin(repository.Db, &userLogin, paramUserLoginDto.UserId)
+		err := userLoginModel.GetUserLogin(repository.Db, &userLogin, paramUserLoginDto.UserId)
 
 		if err != nil {
 			//	找不到則可登入
@@ -52,7 +54,7 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 				userLogin.UserLoginTokenId = uuid.New().String()
 				userLogin.UserId = user.UserId
 
-				err = model.CreateUserLogin(repository.Db, &userLogin)
+				err = userLoginModel.CreateUserLogin(repository.Db, &userLogin)
 				if err != nil {
 					c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 					return
@@ -77,10 +79,11 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 
 //get user by id
 func (repository *UserLoginRepo) CheckUserLogin(c *gin.Context) {
+	userLoginModel := model.NewUserLoginModel()
 	id, _ := c.Params.Get("UserId")
 	var userLogin model.UserLogin
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	err := model.GetUserLogin(repository.Db, &userLogin, userId)
+	err := userLoginModel.GetUserLogin(repository.Db, &userLogin, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			errmsg := "userId not login:" + id

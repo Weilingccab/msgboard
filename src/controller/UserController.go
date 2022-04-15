@@ -26,6 +26,8 @@ func NewUserRepo() *UserRepo {
 
 //create user
 func (repository *UserRepo) CreateUser(c *gin.Context) {
+	userModel := model.NewUserModel()
+
 	var paramUserDto paramDto.ParamCreateUserDto
 	c.BindJSON(&paramUserDto)
 
@@ -35,7 +37,7 @@ func (repository *UserRepo) CreateUser(c *gin.Context) {
 	user.Password = paramUserDto.Password
 	user.IsAuthorize = paramUserDto.IsAuthorize
 
-	err := model.CreateUser(repository.Db, &user)
+	err := userModel.CreateUser(repository.Db, &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -45,8 +47,10 @@ func (repository *UserRepo) CreateUser(c *gin.Context) {
 
 //get users
 func (repository *UserRepo) GetUsers(c *gin.Context) {
+	userModel := model.NewUserModel()
+
 	var users []model.User
-	err := model.GetUsers(repository.Db, &users)
+	err := userModel.GetUsers(repository.Db, &users)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -61,14 +65,16 @@ func (repository *UserRepo) GetUsers(c *gin.Context) {
 
 //get user by id
 func (repository *UserRepo) GetUser(c *gin.Context) {
+	userModel := model.NewUserModel()
+
 	id, _ := c.Params.Get("UserId")
 	var user model.User
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	err := model.GetUser(repository.Db, &user, userId)
+	err := userModel.GetUser(repository.Db, &user, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			errmsg := "userId not found" + id
-			c.AbortWithStatusJSON(http.StatusNotFound,gin.H{"error":errmsg})
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errmsg})
 			return
 		}
 
@@ -86,15 +92,17 @@ func (repository *UserRepo) GetUser(c *gin.Context) {
 
 // update user 授權
 func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
+	userModel := model.NewUserModel()
+
 	id, _ := c.Params.Get("UserId")
 	userId, _ := strconv.ParseInt(id, 10, 64)
 
 	var user model.User
-	err := model.GetUser(repository.Db, &user, userId)
+	err := userModel.GetUser(repository.Db, &user, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			errmsg := "userId not found" + id
-			c.AbortWithStatusJSON(http.StatusNotFound,gin.H{"error":errmsg})
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errmsg})
 			return
 		}
 
@@ -106,7 +114,7 @@ func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 	c.BindJSON(&paramUpdateUserDto)
 	user.IsAuthorize = paramUpdateUserDto.IsAuthorize
 
-	err = model.UpdateUser(repository.Db, &user)
+	err = userModel.UpdateUser(repository.Db, &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -116,10 +124,12 @@ func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 
 // delete user
 func (repository *UserRepo) DeleteUser(c *gin.Context) {
+	userModel := model.NewUserModel()
+
 	var user model.User
 	id, _ := c.Params.Get("UserId")
 	userId, _ := strconv.ParseInt(id, 10, 64)
-	err := model.DeleteUser(repository.Db, &user, userId)
+	err := userModel.DeleteUser(repository.Db, &user, userId)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
