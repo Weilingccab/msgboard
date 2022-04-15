@@ -28,7 +28,7 @@ func setupRouter() *gin.Engine {
 	//使用者留言相關
 	messageRepo := controller.NewMessageRepo()
 	r.POST("/message", messageRepo.CreateMessage) //有登入才可建立留言，回覆留言需判斷是否為回覆留言
-	//瀏覽所有留言
+	r.GET("/messages", messageRepo.GetMessages)   //瀏覽所有留言
 
 	//管理者相關
 	//管理者查看所有留言並可彈性搜尋

@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"msgboard/db"
+	"msgboard/src/dto"
 	"msgboard/src/model"
 	"msgboard/src/paramDto"
 	"net/http"
@@ -81,4 +83,21 @@ func (repository *MessageRepo) CreateMessage(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "message created successfully"})
+}
+
+func (repository *MessageRepo) GetMessages(c *gin.Context) {
+	messageModel := model.NewMessageModel()
+
+	var messages []model.Message
+	err := messageModel.GetMessages(repository.Db, &messages)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	//假設送出無需特殊處理，可直接用json轉Dto
+	jsondata, _ := json.Marshal(messages)
+	var messageDtos []dto.MessageDto
+	json.Unmarshal(jsondata, &messageDtos)
+	c.JSON(http.StatusOK, messageDtos)
 }

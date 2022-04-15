@@ -9,7 +9,7 @@ import (
 type Message struct {
 	MessageId       int64         `gorm:"column:MessageId;type:auto_increment;primary_key;" json:"MessageId,omitempty"`
 	UserId          int64         `gorm:"column:UserId;" json:"UserId,omitempty"`
-	User            *User         `gorm:"foreignKey:UserId"`
+	User            *User         `gorm:"foreignKey:UserId;"`
 	MessageContent  *string       `gorm:"column:MessageContent;" json:"MessageContent,omitempty"`
 	MessageDateTime time.Time     `gorm:"column:MessageDateTime; autoCreateTime:milli" json:"MessageDateTime,omitempty"`
 	IsReplyType     bool          `gorm:"column:IsReplyType;" json:"IsReplyType,omitempty"`
@@ -36,14 +36,14 @@ func (Message) CreateMessage(db *gorm.DB, message *Message) (err error) {
 	return nil
 }
 
-// //get Messages
-// func GetMessages(db *gorm.DB, Message *[]Message) (err error) {
-// 	err = db.Find(Message).Error
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+//get Messages
+func (Message) GetMessages(db *gorm.DB, message *[]Message) (err error) {
+	err = db.Preload("User").Find(message).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 // //get Message by id
 // func GetMessage(db *gorm.DB, Message *Message, id int64) (err error) {
