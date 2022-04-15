@@ -27,17 +27,11 @@ func CreateUserLogin(db *gorm.DB, UserLogin *UserLogin) (err error) {
 }
 
 //check UserLogin by userId
-func CheckUserLogin(db *gorm.DB, userLogin *UserLogin, userId int64) (err error) {
-	err = db.First(userLogin, userId).Error
+func GetUserLogin(db *gorm.DB, userLogin *UserLogin, userId int64) (err error) {
+	// err = db.First(userLogin, userId).Error
+	err = db.Where("\"UserId\" = ?", userId).First(&userLogin).Error
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-//delete UserLogin by UserId
-func DeleteUserLogin(db *gorm.DB, userLogin *UserLogin, userId int64) (err error) {
-	db.First(userLogin, userId).Delete(userLogin)
-
 	return nil
 }

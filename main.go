@@ -21,8 +21,10 @@ func setupRouter() *gin.Engine {
 	r.DELETE("/user/:UserId", userRepo.DeleteUser)                     //刪除使用者資訊
 
 	//使用者登入相關
-	// r.POST("/user", userRepo.CreateUser) //建立使用者資訊//使用者登入
-	//使用者是否登入
+	userLoginRepo := controller.NewUserLoginRepo()
+
+	r.POST("/userLogin", userLoginRepo.CreateUserLogin)       //使用者有授權者可登入
+	r.PUT("/userLogin/:UserId", userLoginRepo.CheckUserLogin) //使用者是否登入,已登入者回傳資訊
 
 	//使用者留言相關
 	//登入後建立留言，回覆留言需判斷是否為回覆留言

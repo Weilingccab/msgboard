@@ -67,7 +67,8 @@ func (repository *UserRepo) GetUser(c *gin.Context) {
 	err := model.GetUser(repository.Db, &user, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.AbortWithStatus(http.StatusNotFound)
+			errmsg := "userId not found" + id
+			c.AbortWithStatusJSON(http.StatusNotFound,gin.H{"error":errmsg})
 			return
 		}
 
@@ -92,7 +93,8 @@ func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 	err := model.GetUser(repository.Db, &user, userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.AbortWithStatus(http.StatusNotFound)
+			errmsg := "userId not found" + id
+			c.AbortWithStatusJSON(http.StatusNotFound,gin.H{"error":errmsg})
 			return
 		}
 
