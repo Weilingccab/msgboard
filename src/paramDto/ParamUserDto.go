@@ -1,11 +1,11 @@
 package paramDto
 
 type ParamCreateUserDto struct {
-	Account     string `json:"Account,omitempty"`
-	Password    string `json:"Password,omitempty"`
-	IsAuthorize bool   `json:"IsAuthorize,omitempty"`
+	Account     string `json:"Account"`
+	Password    string `json:"Password"`
+	IsAuthorize bool   `json:"IsAuthorize"`
 }
 
 type ParamUpdateUserDto struct {
-	IsAuthorize bool `json:"IsAuthorize,omitempty"`
+	IsAuthorize bool `json:"IsAuthorize"`
 }

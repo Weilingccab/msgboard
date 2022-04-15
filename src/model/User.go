@@ -7,12 +7,12 @@ import (
 )
 
 type User struct {
-	UserId         int64     `gorm:"column:UserId;type:auto_increment;primary_key;" json:"UserId,omitempty"`
-	Account        string    `gorm:"column:Account;" json:"Account,omitempty"`
-	Password       string    `gorm:"column:Password;" json:"Password,omitempty"`
-	IsAuthorize    bool      `gorm:"column:IsAuthorize; type:boolean;" json:"IsAuthorize,omitempty"`
-	CreateDateTime time.Time `gorm:"column:CreateDateTime; autoCreateTime:milli" json:"CreateDateTime,omitempty"`
-	UpdateDateTime time.Time `gorm:"column:UpdateDateTime; autoUpdateTime:milli" json:"UpdateDateTime,omitempty"`
+	UserId         int64     `gorm:"column:UserId;type:auto_increment;primary_key;" json:"UserId"`
+	Account        string    `gorm:"column:Account;" json:"Account"`
+	Password       string    `gorm:"column:Password;" json:"Password"`
+	IsAuthorize    bool      `gorm:"column:IsAuthorize; type:boolean;" json:"IsAuthorize"`
+	CreateDateTime time.Time `gorm:"column:CreateDateTime; autoCreateTime:milli" json:"CreateDateTime"`
+	UpdateDateTime time.Time `gorm:"column:UpdateDateTime; autoUpdateTime:milli" json:"UpdateDateTime"`
 }
 
 func (User) TableName() string {
@@ -24,7 +24,7 @@ func NewUserModel() *User {
 }
 
 //create a user
-func (User) CreateUser(db *gorm.DB, User *User) (err error) {
+func (*User) CreateUser(db *gorm.DB, User *User) (err error) {
 	err = db.Create(User).Error
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (User) CreateUser(db *gorm.DB, User *User) (err error) {
 }
 
 //get users
-func (user User) GetUsers(db *gorm.DB, User *[]User) (err error) {
+func (*User) GetUsers(db *gorm.DB, User *[]User) (err error) {
 	err = db.Find(User).Error
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func (user User) GetUsers(db *gorm.DB, User *[]User) (err error) {
 }
 
 //get user by id
-func (User) GetUser(db *gorm.DB, User *User, id int64) (err error) {
+func (*User) GetUser(db *gorm.DB, User *User, id int64) (err error) {
 	err = db.First(User, id).Error
 	if err != nil {
 		return err
@@ -51,13 +51,13 @@ func (User) GetUser(db *gorm.DB, User *User, id int64) (err error) {
 }
 
 //update user
-func (User) UpdateUser(db *gorm.DB, User *User) (err error) {
+func (*User) UpdateUser(db *gorm.DB, User *User) (err error) {
 	db.Save(User)
 	return nil
 }
 
 //delete user
-func (User) DeleteUser(db *gorm.DB, User *User, id int64) (err error) {
+func (*User) DeleteUser(db *gorm.DB, User *User, id int64) (err error) {
 	db.First(User, id).Delete(User)
 
 	return nil

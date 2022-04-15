@@ -9,7 +9,7 @@ import (
 type Message struct {
 	MessageId       int64     `gorm:"column:MessageId;type:auto_increment;primary_key;" json:"MessageId,omitempty"`
 	UserId          int64     `gorm:"column:UserId;" json:"UserId,omitempty"`
-	User            User      `gorm:"foreignKey:UserId"`
+	User            *User      `gorm:"foreignKey:UserId"`
 	MessageContent  string    `gorm:"column:MessageContent;" json:"MessageContent,omitempty"`
 	MessageDateTime time.Time `gorm:"column:MessageDateTime; autoCreateTime:milli" json:"MessageDateTime,omitempty"`
 	IsReplyType     bool      `gorm:"column:IsReplyType;" json:"IsReplyType,omitempty"`
