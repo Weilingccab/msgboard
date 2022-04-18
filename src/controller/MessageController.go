@@ -100,4 +100,94 @@ func (repository *MessageRepo) GetMessages(c *gin.Context) {
 	var messageDtos []dto.MessageDto
 	json.Unmarshal(jsondata, &messageDtos)
 	c.JSON(http.StatusOK, messageDtos)
+
 }
+
+// update message hide
+func (repository *MessageRepo) UpdateMessageHide(c *gin.Context) {
+	messageModel := model.NewMessageModel()
+
+	id, _ := c.Params.Get("MessageId")
+	messageId, _ := strconv.ParseInt(id, 10, 64)
+
+	var message model.Message
+	err := messageModel.GetMessage(repository.Db, &message, messageId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			errmsg := "messageId not found" + id
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errmsg})
+			return
+		}
+
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	var paramUpdateMessageIsHideDto paramDto.ParamUpdateMessageIsHideDto
+	c.BindJSON(&paramUpdateMessageIsHideDto)
+	message.IsHide = paramUpdateMessageIsHideDto.IsHide
+
+	err = messageModel.UpdateMessage(repository.Db, &message)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "message is hide successfully"})
+}
+
+// update message lock reply
+func (repository *MessageRepo) UpdateMessageLockReply(c *gin.Context) {
+	messageModel := model.NewMessageModel()
+
+	id, _ := c.Params.Get("MessageId")
+	messageId, _ := strconv.ParseInt(id, 10, 64)
+
+	var message model.Message
+	err := messageModel.GetMessage(repository.Db, &message, messageId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			errmsg := "messageId not found" + id
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": errmsg})
+			return
+		}
+
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	var paramUpdateMessageIsLockReplyDto paramDto.ParamUpdateMessageIsLockReplyDto
+	c.BindJSON(&paramUpdateMessageIsLockReplyDto)
+	message.IsLockReply = paramUpdateMessageIsLockReplyDto.IsLockReply
+
+	err = messageModel.UpdateMessage(repository.Db, &message)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "message is lock reply successfully"})
+}
+
+
+func (repository *MessageRepo) GetMessagesFlexibleSearch(c *gin.Context) {
+	messageModel := model.NewMessageModel()
+
+	var paramQueryMessageDto paramDto.ParamQueryMessageDto
+	c.BindJSON(&paramQueryMessageDto)
+
+
+	var messages []model.Message
+	err := messageModel.GetMessagesFlexibleSearch(repository.Db, &messages, &paramQueryMessageDto)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	//假設送出無需特殊處理，可直接用json轉Dto
+	jsondata, _ := json.Marshal(messages)
+	var messageDtos []dto.MessageDto
+	json.Unmarshal(jsondata, &messageDtos)
+	c.JSON(http.StatusOK, messageDtos)
+
+}
+
+
