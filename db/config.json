@@ -1,7 +1,7 @@
 {
-    "Addr": "yourAddress",
+    "Addr": "database-1.ch9ftpmttgao.ap-northeast-1.rds.amazonaws.com",
     "Port": 5432,
     "Username": "postgres",
-    "Name": "yourDbName",
-    "Password": "yourDbPassword"
+    "Name": "msgboardDB",
+    "Password": "weiling0"
 }
