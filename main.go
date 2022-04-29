@@ -63,6 +63,7 @@ func setupRouter(r *gin.Engine) *gin.Engine {
 // @host localhost:8080
 func main() {
 	r := gin.Default()
+	r.Use(CORSMiddleware())
 
 	setupRouter(r)
 	ginPort := fmt.Sprintf(":%s", "8080")
@@ -75,16 +76,20 @@ func main() {
 	fmt.Println(ginPort)
 	r.Run(ginPort)
 
-	// 	docs.SwaggerInfo.BasePath = "/api/v1"
-	//    v1 := r.Group("/api/v1")
-	//    {
-	//       eg := v1.Group("/example")
-	//       {
-	//          eg.GET("/helloworld",Helloworld)
-	//       }
-	//    }
-	//    r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+}
 
-	// r.Run(":8082") // default localhost:8000
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
 
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
 }
