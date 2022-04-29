@@ -1,0 +1,376 @@
+definitions:
+  dto.MessageDto:
+    properties:
+      IsHide:
+        type: boolean
+      IsLockReply:
+        type: boolean
+      IsReplyType:
+        type: boolean
+      MessageContent:
+        type: string
+      MessageDateTime:
+        type: string
+      MessageReply:
+        $ref: '#/definitions/dto.MessageReplyDto'
+      User:
+        $ref: '#/definitions/dto.UserDto'
+      messageId:
+        type: integer
+    type: object
+  dto.MessageReplyDto:
+    properties:
+      MainMessageId:
+        type: integer
+      PreviousMessageId:
+        type: integer
+    type: object
+  dto.UserDto:
+    properties:
+      Account:
+        type: string
+      IsAuthorize:
+        type: boolean
+      UserId:
+        type: integer
+    type: object
+  model.UserLogin:
+    properties:
+      LoginDateTime:
+        type: string
+      UserId:
+        type: integer
+      UserLoginTokenId:
+        type: string
+    type: object
+  paramDto.ParamCreateMessageDto:
+    properties:
+      IsReplyType:
+        type: boolean
+      MessageContent:
+        type: string
+      PreviousMessageId:
+        type: integer
+      UserId:
+        type: integer
+      UserLoginTokenId:
+        type: string
+    type: object
+  paramDto.ParamCreateUserDto:
+    properties:
+      Account:
+        type: string
+      IsAuthorize:
+        type: boolean
+      Password:
+        type: string
+    type: object
+  paramDto.ParamQueryMessageDto:
+    properties:
+      IsHide:
+        type: boolean
+      IsLockReply:
+        type: boolean
+      IsReplyType:
+        type: boolean
+      MessageContent:
+        type: string
+      MessageDateTimeStart:
+        type: string
+      MessageDateTimeTo:
+        type: string
+      UserId:
+        type: integer
+    type: object
+  paramDto.ParamUserLoginDto:
+    properties:
+      UserId:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Swagger API.
+  title: Msgboard Demo
+  version: "1.0"
+paths:
+  /msgboard/messageInfo/message:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 欲送出的訊息資料
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/paramDto.ParamCreateMessageDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "message created successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 建立一筆訊息
+      tags:
+      - 訊息相關
+  /msgboard/messageInfo/message/isHide/{MessageId}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 訊息Id
+        in: path
+        name: MessageId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "message is hide successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 更新訊息為不顯示狀態
+      tags:
+      - 訊息相關
+  /msgboard/messageInfo/message/isLockReply/{MessageId}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 訊息Id
+        in: path
+        name: MessageId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "message is lock reply successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 更新訊息為不可回覆狀態
+      tags:
+      - 訊息相關
+  /msgboard/messageInfo/messages:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 使用者資料陣列
+          schema:
+            items:
+              $ref: '#/definitions/dto.MessageDto'
+            type: array
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 取得所有訊息資訊
+      tags:
+      - 訊息相關
+  /msgboard/messageInfo/messages/flexibleSearch:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 欲送出查詢的訊息資料
+        in: body
+        name: paramQueryMessageDto
+        required: true
+        schema:
+          $ref: '#/definitions/paramDto.ParamQueryMessageDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 符合查詢的訊息陣列
+          schema:
+            items:
+              $ref: '#/definitions/dto.MessageDto'
+            type: array
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 彈性查詢訊息資訊
+      tags:
+      - 訊息相關
+  /msgboard/userInfo/user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 欲送出的使用者資料
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/paramDto.ParamCreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "User created successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 建立使用者
+      tags:
+      - 使用者相關
+  /msgboard/userInfo/user/{UserId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 使用者Id
+        in: path
+        name: UserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "User deleted successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 刪除使用者授權
+      tags:
+      - 使用者相關
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 使用者Id
+        in: path
+        name: UserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 使用者資料
+          schema:
+            $ref: '#/definitions/dto.UserDto'
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 取得單一使用者資訊
+      tags:
+      - 使用者相關
+  /msgboard/userInfo/user/isAuthorize/{UserId}:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 使用者Id
+        in: path
+        name: UserId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message": "User updated successfully"}'
+          schema:
+            type: string
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 更新使用者授權
+      tags:
+      - 使用者相關
+  /msgboard/userInfo/userLogin/{UserId}:
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 使用者登入資料
+          schema:
+            $ref: '#/definitions/model.UserLogin'
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 檢查使用者登入狀態
+      tags:
+      - 使用者登入相關
+  /msgboard/userInfo/users:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 使用者資料陣列
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserDto'
+            type: array
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 取得所有使用者資訊
+      tags:
+      - 使用者相關
+  /msgboard/userLoginInfo/userLogin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 欲送出的使用者資料
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/paramDto.ParamUserLoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 使用者登入回傳資料
+          schema:
+            $ref: '#/definitions/model.UserLogin'
+        "400":
+          description: '{"error": errInfo}'
+          schema:
+            type: string
+      summary: 使用者登入
+      tags:
+      - 使用者登入相關
+swagger: "2.0"

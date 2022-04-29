@@ -24,7 +24,14 @@ func NewMessageRepo() *MessageRepo {
 	return &MessageRepo{Db: db}
 }
 
-//create user
+// @Summary 建立一筆訊息
+// @Tags 訊息相關
+// @Accept  json
+// @Produce  json
+// @Param user body paramDto.ParamCreateMessageDto true "欲送出的訊息資料"
+// @Success 200 string string  "{"message": "message created successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/messageInfo/message [post]
 func (repository *MessageRepo) CreateMessage(c *gin.Context) {
 	userLoginModel := model.NewUserLoginModel()
 
@@ -85,6 +92,13 @@ func (repository *MessageRepo) CreateMessage(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "message created successfully"})
 }
 
+// @Summary 取得所有訊息資訊
+// @Tags 訊息相關
+// @Accept  json
+// @Produce  json
+// @Success 200 array dto.MessageDto "使用者資料陣列"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/messageInfo/messages [get]
 func (repository *MessageRepo) GetMessages(c *gin.Context) {
 	messageModel := model.NewMessageModel()
 
@@ -103,7 +117,14 @@ func (repository *MessageRepo) GetMessages(c *gin.Context) {
 
 }
 
-// update message hide
+// @Summary 更新訊息為不顯示狀態
+// @Tags 訊息相關
+// @Accept  json
+// @Produce  json
+// @Param MessageId path string true "訊息Id"
+// @Success 200 string string "{"message": "message is hide successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/messageInfo/message/isHide/{MessageId} [put]
 func (repository *MessageRepo) UpdateMessageHide(c *gin.Context) {
 	messageModel := model.NewMessageModel()
 
@@ -135,7 +156,14 @@ func (repository *MessageRepo) UpdateMessageHide(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "message is hide successfully"})
 }
 
-// update message lock reply
+// @Summary 更新訊息為不可回覆狀態
+// @Tags 訊息相關
+// @Accept  json
+// @Produce  json
+// @Param MessageId path string true "訊息Id"
+// @Success 200 string string "{"message": "message is lock reply successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/messageInfo/message/isLockReply/{MessageId} [put]
 func (repository *MessageRepo) UpdateMessageLockReply(c *gin.Context) {
 	messageModel := model.NewMessageModel()
 
@@ -167,13 +195,19 @@ func (repository *MessageRepo) UpdateMessageLockReply(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "message is lock reply successfully"})
 }
 
-
+// @Summary 彈性查詢訊息資訊
+// @Tags 訊息相關
+// @Accept  json
+// @Produce  json
+// @Param paramQueryMessageDto body paramDto.ParamQueryMessageDto true "欲送出查詢的訊息資料"
+// @Success 200 array dto.MessageDto  "符合查詢的訊息陣列"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/messageInfo/messages/flexibleSearch [post]
 func (repository *MessageRepo) GetMessagesFlexibleSearch(c *gin.Context) {
 	messageModel := model.NewMessageModel()
 
 	var paramQueryMessageDto paramDto.ParamQueryMessageDto
 	c.BindJSON(&paramQueryMessageDto)
-
 
 	var messages []model.Message
 	err := messageModel.GetMessagesFlexibleSearch(repository.Db, &messages, &paramQueryMessageDto)
@@ -189,5 +223,3 @@ func (repository *MessageRepo) GetMessagesFlexibleSearch(c *gin.Context) {
 	c.JSON(http.StatusOK, messageDtos)
 
 }
-
-

@@ -1,0 +1,582 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Swagger API.",
+        "title": "Msgboard Demo",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/msgboard/messageInfo/message": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "訊息相關"
+                ],
+                "summary": "建立一筆訊息",
+                "parameters": [
+                    {
+                        "description": "欲送出的訊息資料",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/paramDto.ParamCreateMessageDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"message created successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/messageInfo/message/isHide/{MessageId}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "訊息相關"
+                ],
+                "summary": "更新訊息為不顯示狀態",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "訊息Id",
+                        "name": "MessageId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"message is hide successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/messageInfo/message/isLockReply/{MessageId}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "訊息相關"
+                ],
+                "summary": "更新訊息為不可回覆狀態",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "訊息Id",
+                        "name": "MessageId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"message is lock reply successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/messageInfo/messages": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "訊息相關"
+                ],
+                "summary": "取得所有訊息資訊",
+                "responses": {
+                    "200": {
+                        "description": "使用者資料陣列",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.MessageDto"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/messageInfo/messages/flexibleSearch": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "訊息相關"
+                ],
+                "summary": "彈性查詢訊息資訊",
+                "parameters": [
+                    {
+                        "description": "欲送出查詢的訊息資料",
+                        "name": "paramQueryMessageDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/paramDto.ParamQueryMessageDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "符合查詢的訊息陣列",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.MessageDto"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userInfo/user": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者相關"
+                ],
+                "summary": "建立使用者",
+                "parameters": [
+                    {
+                        "description": "欲送出的使用者資料",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/paramDto.ParamCreateUserDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"User created successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userInfo/user/isAuthorize/{UserId}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者相關"
+                ],
+                "summary": "更新使用者授權",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "使用者Id",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"User updated successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userInfo/user/{UserId}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者相關"
+                ],
+                "summary": "取得單一使用者資訊",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "使用者Id",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "使用者資料",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserDto"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者相關"
+                ],
+                "summary": "刪除使用者授權",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "使用者Id",
+                        "name": "UserId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"User deleted successfully\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userInfo/userLogin/{UserId}": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者登入相關"
+                ],
+                "summary": "檢查使用者登入狀態",
+                "responses": {
+                    "200": {
+                        "description": "使用者登入資料",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserLogin"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userInfo/users": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者相關"
+                ],
+                "summary": "取得所有使用者資訊",
+                "responses": {
+                    "200": {
+                        "description": "使用者資料陣列",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.UserDto"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgboard/userLoginInfo/userLogin": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "使用者登入相關"
+                ],
+                "summary": "使用者登入",
+                "parameters": [
+                    {
+                        "description": "欲送出的使用者資料",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/paramDto.ParamUserLoginDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "使用者登入回傳資料",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserLogin"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"error\": errInfo}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.MessageDto": {
+            "type": "object",
+            "properties": {
+                "IsHide": {
+                    "type": "boolean"
+                },
+                "IsLockReply": {
+                    "type": "boolean"
+                },
+                "IsReplyType": {
+                    "type": "boolean"
+                },
+                "MessageContent": {
+                    "type": "string"
+                },
+                "MessageDateTime": {
+                    "type": "string"
+                },
+                "MessageReply": {
+                    "$ref": "#/definitions/dto.MessageReplyDto"
+                },
+                "User": {
+                    "$ref": "#/definitions/dto.UserDto"
+                },
+                "messageId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.MessageReplyDto": {
+            "type": "object",
+            "properties": {
+                "MainMessageId": {
+                    "type": "integer"
+                },
+                "PreviousMessageId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserDto": {
+            "type": "object",
+            "properties": {
+                "Account": {
+                    "type": "string"
+                },
+                "IsAuthorize": {
+                    "type": "boolean"
+                },
+                "UserId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.UserLogin": {
+            "type": "object",
+            "properties": {
+                "LoginDateTime": {
+                    "type": "string"
+                },
+                "UserId": {
+                    "type": "integer"
+                },
+                "UserLoginTokenId": {
+                    "type": "string"
+                }
+            }
+        },
+        "paramDto.ParamCreateMessageDto": {
+            "type": "object",
+            "properties": {
+                "IsReplyType": {
+                    "type": "boolean"
+                },
+                "MessageContent": {
+                    "type": "string"
+                },
+                "PreviousMessageId": {
+                    "type": "integer"
+                },
+                "UserId": {
+                    "type": "integer"
+                },
+                "UserLoginTokenId": {
+                    "type": "string"
+                }
+            }
+        },
+        "paramDto.ParamCreateUserDto": {
+            "type": "object",
+            "properties": {
+                "Account": {
+                    "type": "string"
+                },
+                "IsAuthorize": {
+                    "type": "boolean"
+                },
+                "Password": {
+                    "type": "string"
+                }
+            }
+        },
+        "paramDto.ParamQueryMessageDto": {
+            "type": "object",
+            "properties": {
+                "IsHide": {
+                    "type": "boolean"
+                },
+                "IsLockReply": {
+                    "type": "boolean"
+                },
+                "IsReplyType": {
+                    "type": "boolean"
+                },
+                "MessageContent": {
+                    "type": "string"
+                },
+                "MessageDateTimeStart": {
+                    "type": "string"
+                },
+                "MessageDateTimeTo": {
+                    "type": "string"
+                },
+                "UserId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "paramDto.ParamUserLoginDto": {
+            "type": "object",
+            "properties": {
+                "UserId": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

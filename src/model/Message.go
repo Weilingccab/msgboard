@@ -69,7 +69,9 @@ func (*Message) GetMessagesFlexibleSearch(db *gorm.DB, messages *[]Message, quer
 		db = db.Preload("User").Where("\"UserId\" = ?", queryParamMessage.UserId)
 	}
 	if queryParamMessage.MessageContent != nil {
-		db = db.Where("\"MessageContent\" = ?", queryParamMessage.MessageContent)
+		messageContentVal := *queryParamMessage.MessageContent
+		str := fmt.Sprintf("%%%s%%", messageContentVal)
+		db = db.Where("\"MessageContent\" like ?", str)
 	}
 	if queryParamMessage.MessageDateTimeStart != nil && queryParamMessage.MessageDateTimeTo != nil {
 		db = db.Where("\"MessageDateTime\" between ? and ?", queryParamMessage.MessageDateTimeStart, queryParamMessage.MessageDateTimeTo)

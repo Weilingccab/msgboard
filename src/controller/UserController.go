@@ -24,7 +24,14 @@ func NewUserRepo() *UserRepo {
 	return &UserRepo{Db: db}
 }
 
-//create user
+// @Summary 建立使用者
+// @Tags 使用者相關
+// @Accept  json
+// @Produce  json
+// @Param user body paramDto.ParamCreateUserDto true "欲送出的使用者資料"
+// @Success 200 string string  "{"message": "User created successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/user [post]
 func (repository *UserRepo) CreateUser(c *gin.Context) {
 	userModel := model.NewUserModel()
 
@@ -45,7 +52,13 @@ func (repository *UserRepo) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
-//get users
+// @Summary 取得所有使用者資訊
+// @Tags 使用者相關
+// @Accept  json
+// @Produce  json
+// @Success 200 array dto.UserDto "使用者資料陣列"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/users [get]
 func (repository *UserRepo) GetUsers(c *gin.Context) {
 	userModel := model.NewUserModel()
 
@@ -63,7 +76,14 @@ func (repository *UserRepo) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, userDtos)
 }
 
-//get user by id
+// @Summary 取得單一使用者資訊
+// @Tags 使用者相關
+// @Accept  json
+// @Produce  json
+// @Param UserId path string true "使用者Id"
+// @Success 200 object dto.UserDto  "使用者資料"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/user/{UserId} [get]
 func (repository *UserRepo) GetUser(c *gin.Context) {
 	userModel := model.NewUserModel()
 
@@ -90,7 +110,14 @@ func (repository *UserRepo) GetUser(c *gin.Context) {
 
 }
 
-// update user 授權
+// @Summary 更新使用者授權
+// @Tags 使用者相關
+// @Accept  json
+// @Produce  json
+// @Param UserId path string true "使用者Id"
+// @Success 200 string string "{"message": "User updated successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/user/isAuthorize/{UserId} [put]
 func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 	userModel := model.NewUserModel()
 
@@ -119,10 +146,17 @@ func (repository *UserRepo) UpdateUserIsAuthorize(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
-// delete user
+// @Summary 刪除使用者授權
+// @Tags 使用者相關
+// @Accept  json
+// @Produce  json
+// @Param UserId path string true "使用者Id"
+// @Success 200 string string "{"message": "User deleted successfully"}"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/user/{UserId} [delete]
 func (repository *UserRepo) DeleteUser(c *gin.Context) {
 	userModel := model.NewUserModel()
 

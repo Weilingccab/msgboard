@@ -22,7 +22,14 @@ func NewUserLoginRepo() *UserLoginRepo {
 	return &UserLoginRepo{Db: db}
 }
 
-//create user
+// @Summary 使用者登入
+// @Tags 使用者登入相關
+// @Accept  json
+// @Produce  json
+// @Param user body paramDto.ParamUserLoginDto true "欲送出的使用者資料"
+// @Success 200 object model.UserLogin "使用者登入回傳資料"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userLoginInfo/userLogin [post]
 func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 	userLoginModel := model.NewUserLoginModel()
 	userModel := model.NewUserModel()
@@ -75,6 +82,13 @@ func (repository *UserLoginRepo) CreateUserLogin(c *gin.Context) {
 
 }
 
+// @Summary 檢查使用者登入狀態
+// @Tags 使用者登入相關
+// @Accept  json
+// @Produce  json
+// @Success 200 object model.UserLogin "使用者登入資料"
+// @Failure 400 string string  "{"error": errInfo}"
+// @Router /msgboard/userInfo/userLogin/{UserId} [put]
 func (repository *UserLoginRepo) CheckUserLogin(c *gin.Context) {
 	userLoginModel := model.NewUserLoginModel()
 	id, _ := c.Params.Get("UserId")
