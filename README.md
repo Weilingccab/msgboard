@@ -18,7 +18,7 @@ Using :
       3.4.彈性查詢留言. 
 連線測試：
 ---
-  http://ec2-3http://35.77.58.247:8080/msgboard/test/ping
+  http://35.77.58.247:8080/msgboard/test/ping
   或
   http://ec2-35-77-58-247.ap-northeast-1.compute.amazonaws.com:8080/msgboard/test/ping
   以上兩組連進去如果看到回應pong，即成功
