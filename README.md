@@ -5,7 +5,7 @@ Using :
     Postgresql on AWS. 
     Go: gin gorm. 
     Docker build image deploy to AWS EC2
-  
+    API document: gin-swagger 
 需求：
 ---  
 
