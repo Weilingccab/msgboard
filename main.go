@@ -84,7 +84,7 @@ func main() {
 	setupRouter(r)
 	ginPort := fmt.Sprintf(":%s", "8080")
 
-	pgConnString := fmt.Sprintf("http://localhost%s/swagger/doc.json",
+	pgConnString := fmt.Sprintf("http://35.78.97.207%s/swagger/doc.json",
 		ginPort)
 	fmt.Println(pgConnString)
 	url := ginSwagger.URL(pgConnString) // The url pointing to API definition
