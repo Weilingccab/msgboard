@@ -76,7 +76,7 @@ func CORSMiddleware() gin.HandlerFunc {
 // @title Msgboard Demo
 // @version 1.0
 // @description Swagger API.
-// @host localhost:8080
+// @host 35.78.97.207:8080
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())

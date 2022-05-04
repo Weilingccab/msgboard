@@ -87,7 +87,7 @@ definitions:
       UserId:
         type: integer
     type: object
-host: localhost:8080
+host: 35.78.97.207:8080
 info:
   contact: {}
   description: Swagger API.
