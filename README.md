@@ -24,6 +24,9 @@ Using :
   http://35.78.97.207:8080/msgboard/userInfo/users
   會回傳使用者陣列
   
+  http://35.78.97.207:8080/swagger/index.html
+  可以透過該頁面看到API文件
+  
 詳細操作文件：
 ---
   https://hackmd.io/@1R4BnDrZQVa-_xVJKEo6ww/H1cWssDHq
