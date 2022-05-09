@@ -1,4 +1,4 @@
-# msgboard
+# 留言板簡易範例
 
 Using :  
 ---
